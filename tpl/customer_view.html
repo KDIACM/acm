@@ -1,0 +1,45 @@
+{include file='header.tpl'}
+
+<div class="content_inner">
+  <fieldset>
+    <legend>View User</legend>
+    <ol class="form_class">
+      {if $img_path}
+      <li>
+        <label></label>
+        <img src="{$img_path}" />
+      </li>
+      {/if}
+      <li>
+        <label>First Name</label>
+					{$customer->m_first_name}&nbsp;
+      </li>
+      <li>
+        <label>Last name</label>
+					{$customer->m_last_name}&nbsp;
+      </li>
+      <li>
+        <label>Nick Name</label>
+					{$customer->m_nick_email} &nbsp;
+      </li>
+      <li>
+        <label>NIC Number</label>
+					{$customer->m_nic_number}&nbsp;
+      </li>
+      <li>
+        <label>Address</label>
+					{$customer->m_address}&nbsp;
+      </li>
+      <li>
+        <label>&nbsp;</label>
+        &nbsp;
+      </li>
+      <li>
+        <label>&nbsp;&nbsp;</label>
+        <a href="#">View Accounts</a> | <a href="#">View Payments</a>
+      </li>
+    </ol>
+  </fieldset>
+</div>
+
+{include file='footer.tpl'}

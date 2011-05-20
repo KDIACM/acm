@@ -1,0 +1,36 @@
+{include file='header.tpl'}
+<div class="content_inner">
+  <h2>View account</h2>
+		<legend style="margin: 0px 10px 20px;"><a href="customer.php?mode=view&amp;t_id={$customer_obj->m_customer_id}" title="Click to View">Customer: {$customer_obj->m_first_name} {$customer_obj->m_last_name}</a></legend>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1" class="tablesorter">
+    <thead>
+      <tr>
+        <th title="Sort by Real Name" >Acc No</th>
+								<th>Open Date</th>
+								<th>Amount</th>
+								<th>Rate</th>
+        <th>Status</th>
+								<th>&nbsp;</th>
+        <th>&nbsp;</th>
+								<th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+						{section name=account_list loop=$account_list}
+      <tr id="{$account_list[account_list]->m_account_id}">
+        <td>{$customer_obj->m_customer_code} - {$account_list[account_list]->m_account_number}</td>
+		<td>{$account_list[account_list]->m_open_date}</td>
+		<td>{$account_list[account_list]->m_amount}</td>
+		<td>{$account_list[account_list]->m_rate}</td>
+        <td class="lft">{if $account_list[account_list]->m_status=="1"} Enable{else}Disable{/if}</td>
+		<td><a href="make_payment.php?mode=view_cust_pay&amp;t_id={$account_list[account_list]->m_account_id}&amp;c_id={$customer_obj->m_customer_id}" title="payment">View Payment</a>&nbsp;&nbsp;<a href="make_payment.php?mode=add_pay&amp;t_id={$account_list[account_list]->m_account_id}" title="payment">Add Payment</a></td>
+        <td><a href="account.php?mode=edit&amp;t_id={$account_list[account_list]->m_account_id}" title="Edit">Edit Account</a></td>
+		<td><a href="account.php?mode=change&amp;ac_id={$account_list[account_list]->m_account_id}&amp;t_id={$customer_obj->m_customer_id}" title="status">{if $account_list[account_list]->m_status=="1"} Active{else}Inactive{/if}</a></td>
+     </tr>
+      {/section}
+
+    </tbody>
+  </table>
+</div>
+
+{include file='footer.tpl'}

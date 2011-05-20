@@ -1,0 +1,62 @@
+<div id="content">
+
+<div class="content_inner">
+  <form id="user_prop" name="user_prop" action="user.php" method="post" >
+  <input type="hidden" name="mode" value="add_property" />
+  <input type="hidden" name="t_id" value="{$user->m_user_id}" />
+	<fieldset>
+	<legend>Assign Property</legend>
+	  <ol class="form_class">
+	  <li>
+		<label for="name">Name</label>
+		{$user->m_user_name}
+	</li>
+		<li>
+		<label for="prop">Property</label>
+		<select name="prop" id="prop" >
+			<option value="">[select property]</option>
+		{section name=i loop=$property}
+			<option value="{$property[i]->m_property_id}">{$property[i]->m_property_name}</option>
+		{/section}
+		</select>
+	  </li>
+	  </ol>
+	  <div class="buttons">
+		<button type="submit" class="positive">Add</button>
+	  </div>
+	</fieldset>
+  </form>
+</div>
+
+{if $user_property}
+<div class="content_inner">
+  <h2>User Property List</h2>
+  <table id="table1" cellpadding="0" cellspacing="0" border="0" class="tablesorter">
+	<caption>
+	  
+	</caption>
+	<thead>
+	  <tr>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Enable</th>
+		<th></th>
+	  </tr>
+	</thead>
+	<tbody>
+	{section name=i loop=$user_property}
+	  <tr>
+		<td>{$user_property[i]->m_property_name}</td>
+		<td>{$user_property[i]->m_property_des}</td>
+		<td>{$user_property[i]->m_property_enabled}</td>
+		<td>Edit</td>
+	  </tr>
+	 {/section}
+	</tbody>
+  </table>
+</div>
+{/if}
+
+</div>
+
+

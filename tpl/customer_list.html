@@ -1,0 +1,65 @@
+{include file='header.tpl'}
+
+<div class="content_inner">
+  <div>
+    <form action="" method="get">
+      <input type="hidden" value="{$action}" name="mode" />
+      <input type="text" name="q" value="{$q}" />
+      <input type="submit" value=" Search " /><input type="button" onclick="javascript:window.location='customer.php?mode=list';" value=" Reset " />
+    </form>
+    <span class="info-text">( search by firstname, lastname, nickname, NIC and user code )</span>
+  </div> <br />
+  <h2>View customers</h2>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1" class="tablesorter">
+    <caption>
+
+    </caption>
+    <thead>
+      <tr>
+								<th title="Sort by Name" class="tooltip">Customer No</th>
+        <th title="Sort by Name" class="tooltip">Name</th>
+        <th title="Sort by Real Name" >Nick Name</th>
+        <th title="Sort by Email Address">Accounts</th>
+        <th>Active/Inactive</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {section name=customer_list loop=$customer_list}
+      <tr id="{$customer_list[customer_list]->m_customer_id}">
+										<td>{$customer_list[customer_list]->m_customer_code}</td>
+        <td><a href="customer.php?mode=view&amp;t_id={$customer_list[customer_list]->m_customer_id}" title="Click to View">{$customer_list[customer_list]->m_first_name} {$customer_list[customer_list]->m_last_name}</a></td>
+        <td>{$customer_list[customer_list]->m_nick_name}</td>
+        <td class="lft"><a href="account.php?mode=cust_acc_list&t_id={$customer_list[customer_list]->m_customer_id}" title="View">View</a> &nbsp;&nbsp;<a href="account.php?u_id={$customer_list[customer_list]->m_customer_id}" title="add account">Add</a></td>
+        <td>
+          <a href="customer.php?mode=status&amp;t_id={$customer_list[customer_list]->m_customer_id}" title="States">
+            {if $customer_list[customer_list]->m_status == $active} Inactive {else} Active {/if}
+          </a>
+        </td>
+        <td><a href="customer.php?mode=edit&amp;t_id={$customer_list[customer_list]->m_customer_id}" title="Edit">Edit</a></td>
+      </tr>
+      {/section}
+
+      <tr>
+        <td>&nbsp;</tr>
+      </tr>
+      <tr>
+        <td>
+          {assign var=next_item value=1}
+          {foreach from=$page_list item=page}
+          {if $next_item != $page}....&nbsp;&nbsp;{/if}
+          {if $q}
+          <a href="/acm/customer.php?mode=list&page={$page}&q={$q}"> {$page} </a> &nbsp;&nbsp;
+          {else}
+          <a href="/acm/customer.php?mode=list&page={$page}"> {$page} </a> &nbsp;&nbsp;
+          {/if}
+          {assign var=next_item value=$page+1}
+          {/foreach}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{include file='footer.tpl'}

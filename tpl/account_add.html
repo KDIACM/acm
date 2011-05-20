@@ -1,0 +1,61 @@
+{include file='header.tpl'}
+<div class="content_inner">
+  <form action="account.php" id="frm_account_add" name="frm_account_add" method="post" >
+    <input type="hidden" name="u_id" value="{$customer_obj->m_customer_id}" />
+    <input type="hidden" name="mode" value="{if $mode=="edit"}update{else}add{/if}" />
+				 {if $mode=="edit"}
+           <input type="hidden" name="t_id" value="{$account_obj->m_account_id}" />
+		  {/if}
+
+    <fieldset>
+      <legend>{if $mode=="edit"}Edit {else}Add{/if} Account</legend>
+      <ol class="form_class">
+        {include file='error.tpl'}
+        <li>
+          <label for="customer_id">Customer name</label>
+          {$customer_obj->m_first_name} {$customer_obj->m_last_name} &nbsp;
+        </li>
+        <li>
+          <label for="account_number">Account Number: </label>
+          {$customer_obj->m_customer_code}&nbsp;-
+          <input name="account_number" id="account_number" style="width:65px;" type="text" value="{$account_obj->m_account_number}" size="30" />
+        </li>
+        <li>
+          <label for="amount">Amount</label>
+          <input name="amount" id="amount" type="text" value="{$account_obj->m_amount}" size="30" />
+        </li>
+        <li>
+          <label for="rate">Rate</label>
+          <input name="rate" id="rate" type="text" size="30" value="{$account_obj->m_rate}" />
+        </li>
+								<li>
+          <label for="open_date">Account Open date</label>
+          {if $mode=="edit"}
+            {$account_obj->m_open_date}
+          {else}
+            <input name="open_date" id="open_date" type="text" size="30" value="{$account_obj->m_open_date}" />
+          {/if}
+        </li>
+								{if $mode=="edit"}
+        <li>
+          <label for="update_date">Account Update date</label>
+          <input name="update_date" id="update_date" type="text" size="30" value="{$account_obj->m_update_date}" />
+        </li>
+							{/if}
+							<li>
+          <label for="garente">Garentee</label>
+          <textarea cols="30" rows="5"></textarea>
+        </li>
+      </ol>
+      <div class="buttons">
+        <button type="submit" class="positive">{if $mode=="edit"}Update{else}Submit{/if}</button>
+				{if $mode=="edit"}
+        <button type="button" class="positive" onclick="javascript:document.location.href='account.php?mode=list'">Cancel</button>
+				{else}
+        <button type="reset" class="positive">Reset</button>
+				{/if}
+      </div>
+    </fieldset>
+  </form>
+</div>
+{include file='footer.tpl'}

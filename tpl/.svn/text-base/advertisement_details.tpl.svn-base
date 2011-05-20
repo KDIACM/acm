@@ -1,0 +1,31 @@
+<table width="100%" align="center" class="std" border="0" cellspacing="1" cellpadding="0">
+		<thead>
+			<tr>
+				<th>Ref ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Contact number </th>
+				<th>Email</th>
+				<th>Ad Size</th>
+				<th>Category</th>
+				<th>Insertion Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			{section name=i loop=$ad_obj}
+			{assign var=cat value=$ad_obj[i]->GetCategory()}
+			{assign var=customer value=$ad_obj[i]->GetCustomer()}
+			{assign var=size value=$ad_obj[i]->GetSize()}
+			<tr>
+				<td>{$ad_obj[i]->m_ad_ref_id}</td>
+				<td>{$customer->m_name}</td>
+				<td>{$ad_obj[i]->m_ad_text}</td>
+				<td>{$customer->m_telephone}</td>
+				<td>{$customer->m_email}</td>
+				<td>{$size->m_ad_size_name}</td>
+				<td>{$cat->m_cat_name}</td>
+				<td class="lft">{$ad_obj[i]->m_insert_date}</td>
+			</tr>
+			{/section}
+		</tbody>
+		</table>

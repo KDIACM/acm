@@ -1,0 +1,37 @@
+.pp_footer {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	line-height: 16px;
+	color: #000000
+}
+
+.pp_header {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	color: #000000
+}
+
+.std {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	line-height: 17px;
+	border: 1px solid #CCCCCC;
+	color: #000000
+}
+
+.terms {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	font-weight: normal;
+	line-height: 13px;
+	color: #000000
+}
+
+.DocPageTitle {
+	font-family: Tahoma, Arial, Helvetica;
+	font-size: 18px;
+	font-weight: bold
+}

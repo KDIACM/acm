@@ -1,0 +1,235 @@
+<?php
+/**
+ * User class for manipulate system user functionalities
+ * 
+ * @access public
+ * @package hitad.user
+ * @version 1.0.0
+ * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+ */
+class CUser implements ILogHandler
+{
+	// --- ATTRIBUTES ---
+	const C_LOG_TYPE			= "USER";
+	
+	private $db				  	= null;
+	public $m_user_id 			= '';
+	public $m_user_name 		= '';
+	public $m_user_real_name	= '';
+	public $m_user_password 	= '';
+	public $m_user_email		= '';
+	
+	// --- OPERATIONS ---
+	
+	/**
+	 * Constructor for CUser class
+	 * 
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @param int $p_user_id
+	 * @return void
+	 */
+	public function __construct( $p_user_id )
+	{
+		$this->db 			= CDBConnection::GetInstance();
+
+		$sql      			= 	" SELECT * ".
+				     		  	" FROM tbl_user ".
+		             		  	" WHERE user_id =$p_user_id ";
+		 
+		$rs	      			= 	$this->db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+
+		
+		if(!$rs)throw new CAdException(CAdException::ERROR_MSG_AD_NOT_FOUND);
+		
+		$data	  			= 	$rs->FetchRow();
+		
+		$this->m_user_id 		= $data['user_id'];
+		$this->m_user_name 		= $data['user_name'];
+		$this->m_user_real_name	= $data['user_real_name'];
+		$this->m_user_password 	= $data['user_pwd'];
+		$this->m_user_email		= $data['user_email'];
+	}
+	
+	/**
+	 * Create new User
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @param array $p_arr_data
+	 * @return CUser object
+	 */
+	public function Create( $p_arr_data )
+	{
+		$db			=	CDBConnection::GetInstance();
+		
+		$sql 		=	" INSERT INTO tbl_user (user_name,user_real_name,user_pwd,user_real_pwd,user_email)".
+						" VALUES ('$p_arr_data[user_name]','$p_arr_data[user_real_name]','$p_arr_data[user_pwd]','$p_arr_data[user_real_pwd]','$p_arr_data[user_email]')";
+	
+		$rs			= 	$db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+
+		//if (!$rs) throw new CAdException(CAdException::ERROR_MSG_CREATE_AD);
+		return new CUser($db->Insert_ID());
+	}
+	
+	/**
+	 * Update user details
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @param array $p_arr_data
+	 * @return void
+	 */
+	public function Update()
+	{
+		$sql		=	" UPDATE tbl_user ".
+						" SET user_name='$this->m_user_name',user_real_name='$this->m_user_real_name',user_pwd='$this->m_user_password',user_email='$this->m_user_email' ".
+						" WHERE user_id=$this->m_user_id ";
+        
+        $rs			=	$this->db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+		
+		//if(!$rs) throw new CAdminException(CAdminException::ERROR_MSG_MODIFY_USER);
+	}
+	
+	/**
+	 * Delete user details
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @return void
+	 */
+	public function Delete()
+	{
+		$sql	=	" DELETE ".
+					" FROM tbl_user ".
+					" WHERE user_id=$this->m_user_id ";
+		$rs		=	$this->db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+		
+		//if(!$rs) throw new CAdminException(CAdminException::ERROR_MSG_REMOVE_USER);
+	}
+	
+	 /**
+     * @desc Method of GetValidUser
+     * 
+     * @access public
+     * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+     * @param String $p_user_name
+     * @param String $p_password
+     * @return  $user_obj
+     */
+	public static function GetValidUser($p_user_name,$p_password)
+	{
+		$db		 	=	CDBConnection::GetInstance();
+		
+		$sql		=	" SELECT user_id".
+						" FROM tbl_user" .
+						" WHERE user_real_name='$p_user_name' AND user_real_pwd='$p_password' AND user_enabled=1";
+		$rs			=	$db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+		
+		$data		=	$rs->FetchRow();
+		
+		if($data['user_id']==0)
+		{
+			return false;
+			
+		}
+		else
+		{
+			$user_obj	=	new CUser($data['user_id']);
+			return  $user_obj;
+		}
+	}
+	
+	/**
+	 * Get User Property Value
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @param char $p_user_property
+	 * @return int $value
+	 */
+	public function GetUserPropertyValue( $p_user_property )
+	{
+		$sql	=	" SELECT upv.property_value ".
+					" FROM  tbl_user_property up, tbl_user_property_value upv ".
+					" WHERE up.property_id=upv.property_id and property_enabled=1 and user_id=$this->m_user_id and property_name='$p_user_property'";
+		$value 	= 	$this->db->GetOne( $sql ) or CUtility::SQLError( __FILE__, __LINE__ );
+		
+		if($value == '')
+		{
+			return false;
+		}
+		else
+		{
+			return $value;
+		}
+	}
+	
+	/**
+	 * Get All Users 
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <indika.gunathilaka@gmail.com>
+	 * @return array $arr_user_obj
+	 */
+	public static function GetAll()
+	{
+		$arr_user_obj	= array();
+		$db		=	CDBConnection::GetInstance();
+		$sql	= 	" SELECT user_id ".
+					" FROM tbl_user ";
+		$rs		=	$db->Execute( $sql ) or CUtility::SQLError( __FILE, __LINE );
+		
+		while( $data = $rs->FetchRow())
+		{
+			array_push( $arr_user_obj ,new CUser($data['user_id']) );
+		}
+		
+		return $arr_user_obj;
+					
+	}
+	
+	public function AssignUserProperty($p_property_id)
+	{
+		$sql = " INSERT INTO tbl_user_property_value(user_id,property_id) VALUES($this->m_user_id,$p_property_id)";
+		$this->db->Execute( $sql ) or CUtility::SQLError( __FILE, __LINE );
+	}
+	
+	public function GetUserProperty()
+	{
+		$arr_user_property = array();
+		$sql = 	" SELECT up.property_id ".
+				" FROM tbl_user u,tbl_user_property_value up ".
+				" WHERE u.user_id=$this->m_user_id AND u.user_id=up.user_id ";
+		
+		$rs		=	$this->db->Execute( $sql ) or CUtility::SQLError( __FILE, __LINE );
+		
+		while( $data = $rs->FetchRow())
+		{
+			array_push( $arr_user_property ,new CProperty($data['property_id']) );
+		}
+		return $arr_user_property;
+	}
+	
+	/**
+     * Implement Log function from ILogHandler
+     * 
+     * @access public
+     * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+     * @param String $p_log_msg
+     * @param String $p_log_subject
+     * @param int $p_log_priority
+     * @return void
+     */
+	
+	public function Log( $p_log_msg,$p_log_sql_msg,$p_log_subject='',$p_log_priority=CLogger::LOG_PRIORITY_TYPE_INFO)
+    {
+    	$log_obj				= 	new CLogger();
+    	$log_obj->m_log_type	= 	self::C_LOG_TYPE;
+    	$log_obj->m_fk_1		=	"";//$this->m_ad_id;
+    	$log_obj->m_fk_2		=	"";//$this->m_cus_id;
+    	//$log_obj->m_user_id		=	'';
+    	$log_obj->notify($p_log_msg,$p_log_sql_msg,$p_log_subject,$p_log_priority);
+    }
+}
+?>

@@ -1,0 +1,77 @@
+{include file='header.tpl'}
+
+<!-- InstanceBeginEditable name="CONTENT" -->
+<div class="content_inner">
+  <form action="customer.php" id="frm_customer_add" name="frm_customer_add" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="mode" value="{if $mode=="edit"}update{else}add{/if}" />
+		  {if $mode=="edit"}
+           <input type="hidden" name="t_id" value="{$customer->m_customer_id}" />
+		  {/if}
+
+    <fieldset>
+      <legend>{if $mode=="edit"}Edit {else}Add{/if} Customer</legend>
+      <ol class="form_class">
+        {if $error}
+        <li class="msg">
+          <label class="error">
+          {foreach from=$error item=err}
+            {$err}<br />
+          {/foreach}
+          </label>
+          <div style="clear: both;"></div>
+        </li>
+        {/if}
+
+        {if $mode=="edit"}
+        <li>
+          <label for="txt_name">Customer ID</label> {$customer->m_customer_id}
+        </li>
+        {else}
+        <li>
+          <label for="txt_name">Customer ID</label>
+          <input name="txt_customer_id" id="txt_customer_id" value="{$next_id}" type="text" size="30" />
+        </li>
+        {/if}
+        <li>
+          <label for="txt_name">First Name</label>
+          <input name="txt_f_name" id="txt_f_name" value="{$customer->m_first_name}" type="text" size="30" />
+        </li>
+        <li>
+          <label for="txt_password">Last Name</label>
+          <input name="txt_l_name" id="txt_l_name" value="{$customer->m_last_name}" type="text" size="30" />
+        </li>
+        <li>
+          <label for="txt_password">Nick Name</label>
+          <input name="txt_nick_name" id="txt_nick_name" value="{$customer->m_nick_name}" type="text" size="30" />
+        </li>
+        <li>
+          <label for="txt_password">NIC Number</label>
+          <input name="txt_nic_no" id="txt_nic_no" value="{$customer->m_nic_number}" type="text" size="30" />
+        </li>
+        <li>
+          <label for="txt_password">Contact No.</label>
+          <input name="txt_contact_no" id="txt_contact_no" value="{$customer->m_contact_no}" type="text" size="30" />
+        </li>
+        <li>
+          <label for="txt_password">Address</label>
+          <input name="txt_address" id="txt_address" value="{$customer->m_address}" type="text" size="30" />
+        </li>
+        <li>
+          <label for="conf_password">Image</label>
+          <input name="file_image" id="file_image" type="file" />
+        </li>
+
+      </ol>
+      <div class="buttons">
+        <button type="submit" class="positive">{if $mode=="edit"}Update{else}Submit{/if}</button>
+				{if $mode=="edit"}
+        <button type="button" class="positive" onclick="javascript:document.location.href='customer.php?mode=list'">Cancel</button>
+				{else}
+        <button type="reset" class="positive">Reset</button>
+				{/if}
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+{include file='footer.tpl'}

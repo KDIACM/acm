@@ -1,0 +1,27 @@
+{if $logger}
+<div id="Audit_trial" class="content_inner">
+<fieldset>
+	<legend>Audit Trial</legend>
+	<table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1" class="tablesorter">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Subject</th>
+				<th>Message</th>
+				<th>User</th>
+			</tr>
+		</thead>
+		<tbody>
+			{section name=i loop=$logger}
+			<tr>
+				<td>{$logger[i]->m_date}</td>
+				<td>{$logger[i]->m_subject}</td>
+				<td>{$logger[i]->m_log_text}</td>
+				<td>{$logger[i]->m_user_obj->m_user_name}</td>
+			</tr>
+			{/section}
+		</tbody>
+	</table>
+</fieldset>
+</div>
+{/if}

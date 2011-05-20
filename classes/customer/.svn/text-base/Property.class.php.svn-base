@@ -1,0 +1,121 @@
+<?php
+/**
+ * Property class for manipulate system user property functionalities
+ * 
+ * @access public
+ * @package hitad.user
+ * @version 1.0.0
+ * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+ */
+class CProperty
+{
+	// --- ATTRIBUTES ---
+	private $db				  	= null;
+	public $m_property_id		= '';
+	public $m_property_name		= '';
+	public $m_property_des		= '';
+	public $m_property_enabled 	= '';
+	
+	// --- OPERATIONS ---
+	
+	/**
+	 * Constructor for CUser class
+	 * 
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @param int $p_user_id
+	 * @return void
+	 */
+	public function __construct( $p_property_id )
+	{
+		$this->db 			= CDBConnection::GetInstance();
+
+		$sql      			= 	" SELECT * ".
+				     		  	" FROM tbl_user_property  ".
+		             		  	" WHERE property_id =$p_property_id ";
+		 
+		$rs	      			= 	$this->db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+
+		$data	  			= 	$rs->FetchRow();
+		
+		$this->m_property_id 		= $data['property_id'];
+		$this->m_property_name 	= $data['property_name'];
+		$this->m_property_des	= $data['property_des'];
+		$this->m_property_enabled 	= $data['property_enabled'];
+	}
+	
+	/**
+	 * Create new Property
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @param array $p_arr_data
+	 * @return CProperty object
+	 */
+	public function Create( $p_arr_data )
+	{
+		$db			=	CDBConnection::GetInstance();
+		
+		$sql 		=	" INSERT INTO tbl_user_property (property_name,property_des,property_enabled)".
+						" VALUES ('$p_arr_data[property_name]','$p_arr_data[property_des]','$p_arr_data[property_enabled]')";
+		$rs			= 	$db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+
+		return new CProperty($db->Insert_ID());
+	}
+	
+	/**
+	 * Update user Property
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @return void
+	 */
+	public function Update()
+	{
+		$sql		=	" UPDATE tbl_user_property ".
+						" SET property_name='$this->m_property_name',property_des='$this->m_property_des',property_enabled='$this->m_property_enabled' ".
+						" WHERE property_id=$this->m_property_id ";
+        $this->db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+	}
+	
+	/**
+	 * Delete user Property
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <igunathilaka@yahoo.com>
+	 * @return void
+	 */
+	public function Delete()
+	{
+		$sql	=	" DELETE ".
+					" FROM tbl_user_property ".
+					" WHERE property_id=$this->m_property_id ";
+		$this->db->Execute($sql) or CUtility::SQLError( __FILE__, __LINE__ );
+	}
+	
+	/**
+	 * Get All User Properties 
+	 *
+	 * @access public
+	 * @author Indika Gunathilaka <indika.gunathilaka@gmail.com>
+	 * @return array $arr_property_obj
+	 */
+	public static function GetAll($p_enable='')
+	{
+		$arr_property_obj	= array();
+		$enable_str = "";
+		$db		=	CDBConnection::GetInstance();
+		($p_enable)?$enable_str="WHERE property_enabled=1":$enable_str="WHERE property_enabled=0";
+		$sql	= 	" SELECT property_id ".
+					" FROM tbl_user_property ";
+		$rs		=	$db->Execute( $sql ) or CUtility::SQLError( __FILE, __LINE );
+		
+		while( $data = $rs->FetchRow())
+		{
+			array_push( $arr_property_obj ,new CProperty($data['property_id']) );
+		}
+		return $arr_property_obj;
+	}
+	
+}
+?>

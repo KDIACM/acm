@@ -1,0 +1,36 @@
+{include file='header.tpl'}
+
+<div class="content_inner">
+  <h2>View Users</h2>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1" class="tablesorter">
+    <caption>
+
+    </caption>
+    <thead>
+      <tr>
+        <th title="Sort by Name" class="tooltip">Username</th>
+        <th title="Sort by Name" class="tooltip">View Accounts</th>
+        <th>Edit</th>
+        <th>Active/Inactive</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {section name=user_list loop=$user_list}
+      <tr id="{$user_list[user_list]->m_user_id}">
+        <td>{$user_list[user_list]->m_user_name}</td>
+        <td><a href="#" title="View Account">View</a></td>
+        <td><a href="user.php?mode=edit&amp;t_id={$user_list[user_list]->m_user_id}" title="Edit">Edit</a></td>
+        <td>
+          <a href="user.php?mode=status&amp;t_id={$user_list[user_list]->m_user_id}" title="States">
+            {if $user_list[user_list]->m_status == $active} Inactive {else} Active {/if}
+          </a>
+        </td>
+        <td><a href="user.php?mode=delete&amp;t_id={$user_list[user_list]->m_user_id}" onclick="return confirm('Are you sure to remove this user?');" class="handle1 delete" title="Delete" id="delete1"><span>Delete</span></a></td>
+      </tr>
+      {/section}
+    </tbody>
+  </table>
+</div>
+
+{include file='footer.tpl'}

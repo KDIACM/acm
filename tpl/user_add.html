@@ -1,0 +1,49 @@
+{include file='header.tpl'}
+
+<!-- InstanceBeginEditable name="CONTENT" -->
+<div class="content_inner">
+  <form action="user.php" id="frm_user_add" name="frm_user_add" method="post">
+    <input type="hidden" name="mode" value="{if $mode=="edit"}update{else}add{/if}" />
+		  {if $mode=="edit"}
+           <input type="hidden" name="t_id" value="{$user_obj->m_user_id}" />
+		  {/if}
+
+    <fieldset>
+      <legend>{if $mode=="edit"}Edit {else}Add{/if} User</legend>
+      <ol class="form_class">
+        {if $err == 1}
+        <li class="msg">
+          <label class="error">Username already exists</label><br /><br /><br />
+        </li>
+        {/if}
+        <li>
+          <label for="txt_name">Username</label>
+          {if $mode=="edit"}
+          {$user_obj->m_user_name}
+          {else}
+          <input name="txt_name" id="txt_name" type="text" size="30" />
+          {/if}
+        </li>
+        <li>
+          <label for="txt_password">Password</label>
+          <input name="txt_password" id="txt_password" type="password" size="30" />
+        </li>
+        <li>
+          <label for="conf_password">Confirm Password</label>
+          <input name="conf_password" id="conf_password" type="password" size="30" />
+        </li>
+
+      </ol>
+      <div class="buttons">
+        <button type="submit" class="positive">{if $mode=="edit"}Update{else}Submit{/if}</button>
+				{if $mode=="edit"}
+        <button type="button" class="positive" onclick="javascript:document.location.href='user.php?mode=list'">Cancel</button>
+				{else}
+        <button type="reset" class="positive">Reset</button>
+				{/if}
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+{include file='footer.tpl'}

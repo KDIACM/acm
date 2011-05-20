@@ -1,0 +1,45 @@
+<taconite>
+	
+	{if $category}
+	<show select="#sub_cat_1_frame" />
+	<replaceContent select="#sub_cat_1">
+			{section name=i loop=$category}
+			 <option {if $sub_cat_1 == $category[i]->m_cat_id} selected="selected" {/if}  value="{$category[i]->m_cat_id}">{$category[i]->m_cat_name}</option>
+			{/section}
+	</replaceContent>
+	{else}
+	<replaceContent select="#sub_cat_1">
+	<option value=""></option>
+	</replaceContent>
+	<hide select="#sub_cat_1_frame" />
+	{/if}
+	
+
+	{if $sub_category}
+	<show select="#sub_cat_2_frame" />
+	<replaceContent select="#sub_cat_2">
+			{section name=i loop=$sub_category}
+			 <option {if $sub_cat_2 == $sub_category[i]->m_sub_cat_id} selected="selected" {/if}  value="{$sub_category[i]->m_sub_cat_id}">{$sub_category[i]->m_sub_cat_name}</option>
+			{/section}
+			<option {if $sub_cat_2 == '0'} selected="selected" {/if} value="122">OTHERS</option>	
+	</replaceContent>
+	{else}
+	<replaceContent select="#sub_cat_2">
+	<option value=""></option>
+	</replaceContent>
+	<hide select="#sub_cat_2_frame" />
+	{/if}
+	
+
+	<replaceContent select="#other_box">
+	  {if ($sub_cat_2 == 0)}
+	    <p>
+		   <label for="from_name">Enter Custom Category :</label> 
+		   <input type="text" name="default_custom_cat" value="{$custom_sub_cat}" id="default_custom_cat" size="27" />
+	    </p>
+	  {/if}
+	</replaceContent>
+
+
+</taconite>	
+
