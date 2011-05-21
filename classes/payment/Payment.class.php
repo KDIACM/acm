@@ -104,13 +104,13 @@ class CPayment {
         $payment_obj->m_payment_id = $data['payment_id'];
         $payment_obj->m_account_id = $data['account_id'];
         $payment_obj->m_payment_amount = $data['payment_amount'];
-        $payment_obj->m_extra_amount = $data['extra_amount'];
+        //$payment_obj->m_extra_amount = $data['extra_amount'];
         $payment_obj->m_payment_date = $data['payment_date'];
-        $payment_obj->m_paid_amount = $data['paid_amount'];
-        $payment_obj->m_paid_date = $data['paid_date'];
+        //$payment_obj->m_paid_amount = $data['paid_amount'];
+        //$payment_obj->m_paid_date = $data['paid_date'];
         $payment_obj->m_last_month_amount = $data['last_month_amount'];
         $payment_obj->m_rest_amount = $data['rest_amount'];
-        $payment_obj->m_extra_interest = $data['extra_interest'];
+        //$payment_obj->m_extra_interest = $data['extra_interest'];
         $payment_obj->m_status = $data['status'];
         $payment_obj->m_sys_date = $data['sys_date'];
 
@@ -125,7 +125,7 @@ class CPayment {
                 " PO.paid_date, PO.paid_amount, P.last_month_amount, P.rest_amount, PO.extra_interest " .
                 " FROM payment P, account AC, customer C ,payment_option PO" .
                 " WHERE P.account_id = AC.account_id AND AC.customer_id = C.customer_id AND P.payment_id = PO.payment_id  AND C.customer_id = " . CUtility::StringEscape($customer_id) . " AND AC.account_id = " . CUtility::StringEscape($account_id) .
-                " ORDER BY P.sys_date";
+                " ORDER BY PO.paid_date ASC";
         
         $rs = $db->Execute($sql) or CUtility::SQLError(__FILE, __LINE);
 
@@ -165,18 +165,38 @@ class CPayment {
         if (!$rs)
             throw new Exception();
         $data = $rs->FetchRow();
+        
+        if (!empty ($data['payment_id'])) {
+            
+            $sql = " SELECT rest_amount , payment_date" .
+                    " FROM payment " .
+                    " WHERE payment_id =" . CUtility::StringEscape($data['payment_id']) . " AND account_id =" . CUtility::StringEscape($p_account_id);
 
-        $sql = " SELECT rest_amount , payment_date" .
-                " FROM payment " .
-                " WHERE payment_id =" . CUtility::StringEscape($data['payment_id']) . " AND account_id =" . CUtility::StringEscape($p_account_id);
+            $rs = $db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
+            if (!$rs)
+                throw new Exception();
+            $data = $rs->FetchRow();
+            
+            $this->m_last_month_amount = $data['rest_amount']; 
+            $this->m_payment_date = date('Y-m-d' , strtotime("next month", strtotime($data['payment_date'])));
+        
+        }
+        else
+        {
+            $sql = " SELECT open_date" .
+                    " FROM account " .
+                    " WHERE account_id =" . CUtility::StringEscape($p_account_id);
 
-        $rs = $db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
-        if (!$rs)
-            throw new Exception();
-        $data = $rs->FetchRow();
-
-        $this->m_last_month_amount = $data['rest_amount']; //echo $data['payment_date'] . "ss"; die();
-        $this->m_payment_date = date('Y-m-d' , strtotime("next month", strtotime($data['payment_date'])));
+            $rs = $db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
+            if (!$rs)
+                throw new Exception();
+            $data = $rs->FetchRow();
+            
+            $this->m_last_month_amount = 0; 
+            $this->m_payment_date = date('Y-m-d' , strtotime("next month", strtotime($data['open_date'])));
+        }
+         
+        
     }
 
     public function setPaymentAmount($p_account_id) {

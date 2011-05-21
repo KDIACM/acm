@@ -20,7 +20,7 @@ $navigaton_type	=	new CNavigation('Customer','customer.php?mode=list');
 $navigation_obj->AddNavigation( $navigaton_type );
 
 $smarty->assign('mode', $mode);
-$smarty->assign('upage', 2);
+$smarty->assign('customer_page', 1);
 
 switch ($mode) {
   case '':
@@ -38,10 +38,10 @@ switch ($mode) {
 
     if (empty ($_POST['txt_f_name'])) $error[] = "Enter first name";
     if (empty ($_POST['txt_l_name'])) $error[] = "Enter last name";
-    if (CCustomer::IdExist($_POST['txt_customer_id'])) $error[] = "Customer ID already exists or Incorrect";
+    $smarty->assign('next_id', CCustomer::GetNextCustomerId());
 
     if (!empty ($error)) {
-      //$smarty->assign('next_id', CCustomer::GetNextCustomerId());
+      $smarty->assign('post', $_POST);
       $smarty->assign('error', $error);
       $smarty->display('customer_add.html');
     } else {
@@ -52,7 +52,7 @@ switch ($mode) {
       $arr_data['address']      = $_POST['txt_address'];
       $arr_data['contact_no']   = $_POST['txt_contact_no'];
       $arr_data['image_ext']    = $_POST['file_image'];
-						$arr_data['customer_code'] = $_POST['txt_customer_id'];
+      $arr_data['customer_code']= $_POST['txt_customer_id'];
 
       // set image extention
       if (is_uploaded_file($_FILES['file_image']['tmp_name'])) {
@@ -65,7 +65,16 @@ switch ($mode) {
 
       // upload file
       if (is_uploaded_file($_FILES['file_image']['tmp_name'])) {
-        move_uploaded_file($_FILES['file_image']['tmp_name'], UPLOAD_PATH. 'customer_images/'.$customer->m_customer_id.CCustomer::IMG_PERFIX.$arr_data['image_ext']);
+        $path_tmp = UPLOAD_PATH. 'customer_images/'.$customer->m_customer_id.CCustomer::IMG_TEMP_PERFIX.$arr_data['image_ext'];
+        $path = UPLOAD_PATH. 'customer_images/'.$customer->m_customer_id.CCustomer::IMG_PERFIX.$arr_data['image_ext'];
+        move_uploaded_file($_FILES['file_image']['tmp_name'], $path_tmp);
+        list($width_tmp, $height_tmp) = getimagesize($path_tmp);
+        $width = ($width_tmp < 250)?$width_tmp:250;
+        $objResize = new RVJ_ImageResize($path_tmp, $path , 'W', $width);
+	if (file_exists($path_tmp))
+	{
+	  unlink($path_tmp);
+	}
       }
       CUtility::Redirect('customer.php?mode=list');
       

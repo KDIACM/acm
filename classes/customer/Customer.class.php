@@ -13,6 +13,7 @@ class CCustomer {
 		public $m_customer_code = '';
 
   const IMG_PERFIX      = '_profile.';
+  const IMG_TEMP_PERFIX = '_temp.';
 
   public function __construct($p_customer_id) {
     $this->db = CDBConnection::GetInstance();
@@ -124,9 +125,6 @@ class CCustomer {
 
   public static function IdExist($id) {
     $db   = CDBConnection::GetInstance();
-    if (!is_numeric($id)) {
-      return true;
-    }
     
     $sql = "SELECT customer_id FROM customer WHERE customer_code = ".CUtility::StringEscape($id);
     $rs  = $db->Execute($sql) or CUtility::SQLError(__FILE, __LINE);
@@ -140,7 +138,7 @@ class CCustomer {
   public static function GetNextCustomerId() {
     $db   = CDBConnection::GetInstance();
 
-    $sql = "SELECT max(customer_id)+1 as next_id FROM customer";
+    $sql = "SELECT max(customer_id) as next_id FROM customer";
     $rs  = $db->Execute($sql) or CUtility::SQLError(__FILE, __LINE);
     $data = $rs->FetchRow();
     return $data['next_id'];

@@ -45,6 +45,6 @@ $().ready(function() {
       label.text("").addClass("success");
     }
   })
-
+ 
 })
 

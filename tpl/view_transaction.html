@@ -1,0 +1,62 @@
+{include file='header.tpl'}
+
+<div class="content_inner">
+  <h2>View Transaction for {$account_obj->m_account_number}</h2>
+  Current Account Balance : Rs {$account_obj->m_amount}
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" id="table1" class="tablesorter">
+    <thead>
+      <tr>
+        <th title="Sort by Name">My Transactions</th>
+        <th title="Sort by Name">Customer Transactions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr class="{cycle values='odd_row,even_row'}">
+        <td>
+          <table>
+          <tr>
+            <td class="underline">Amount (Rs:)</td>
+            <td class="underline">Created At</td>
+          </tr>
+          {foreach from=$my_list item=my}
+          <tr>
+            <td style="text-align: right;">{$my->m_amount}</td>
+            <td>{$my->m_created_date}</td>
+          </tr>
+          {foreachelse}
+          <tr>
+            <td colspan="2"><i>No transaction by you</i></td>
+          </tr>
+          {/foreach}
+          </table>
+        </td>
+        <td>
+          <table>
+          <tr>
+            <td class="underline">Amount (Rs:)</td>
+            <td class="underline">Created At</td>
+          </tr>
+          {foreach from=$cust_list item=cust}
+          <tr>
+            <td style="text-align: right;">{$cust->m_amount|replace:'-':''}</td>
+            <td>{$cust->m_created_date}</td>
+          </tr>
+          {foreachelse}
+          <tr>
+            <td colspan="2"><i>No transaction by customer</i></td>
+          </tr>
+          {/foreach}
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+{include file='footer.tpl'}

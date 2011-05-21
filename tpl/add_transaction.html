@@ -1,0 +1,40 @@
+{include file='header.tpl'}
+<div class="content_inner">
+  <form action="account.php" id="frm_account_trn_add" name="frm_account_trn_add" method="post" >
+    <input type="hidden" name="u_id" value="{$account_obj->m_account_id}" />
+    <input type="hidden" name="mode" value="{if $mode=="edit"}update_transaction{else}add_transaction{/if}" />
+    {if $mode=="edit"}
+      <input type="hidden" name="t_id" value="{$transaction_obj->m_transaction_id}" />
+    {/if}
+
+    <fieldset>
+      <legend>{if $mode=="edit"}Edit {else}Add{/if} Account Transaction</legend>
+      <ol class="form_class">
+        {include file='error.tpl'}
+        <li>
+          <label for="customer_id">Account Number</label>
+          {$customer_obj->m_customer_id} - {$account_obj->m_account_number}&nbsp;
+        </li>
+        <li>
+          <label for="amount">Amount</label>
+          <input name="amount" id="amount" type="text" value="{$transaction_obj->m_amount}" size="30" />
+        </li>
+        <li>
+          <label for="rate">Owner</label>
+          <input name="owner" checked id="owner" type="radio" value="{$by_me}" /> {$by_me}
+          <input name="owner" id="owner" type="radio" value="{$by_cust}" /> {$by_cust}
+        </li>
+      </ol>
+
+      <div class="buttons">
+        <button type="submit" class="positive">{if $mode=="edit"}Update{else}Submit{/if}</button>
+        {if $mode=="edit"}
+        <button type="button" class="positive" onclick="javascript:document.location.href='account.php?mode=list'">Cancel</button>
+	{else}
+        <button type="reset" class="positive">Reset</button>
+	{/if}
+      </div>
+    </fieldset>
+  </form>
+</div>
+{include file='footer.tpl'}

@@ -4,6 +4,7 @@
 <input type="hidden" name="mode" value="add_sub" />
  <input type="hidden" name="account_id" value="{$account_obj->m_account_id}" />
 <input type="hidden" name="c_id" value="{$customer_obj->m_customer_id}" />
+ <input type="hidden" name="payment_id" value="{$payment_obj->m_payment_id}" />
 
     <fieldset>
       <legend>Add Sub Pyament</legend>
@@ -16,12 +17,16 @@
     </table>
       <ol class="form_class">
         <li>
+          <label for="rest_amount">Rest Amount</label>
+          <input name="rest_amount" id="rest_amount" type="text" value="{$payment_obj->m_rest_amount}" readonly  size="30" />
+        </li>
+        <li>
           <label for="paid_amount">Paid Amount</label>
           <input name="paid_amount" id="paid_amount" type="text" value="{$payment_obj->m_paid_amount}"  size="30" />
         </li>
 	<li>
           <label for="paid_date">Paid Date</label>
-          <input name="paid_date" id="paid_date" type="text" value="{$payment_obj->m_paid_date}"  size="30" />
+          <input name="paid_date" id="opaid_date" class="w8em format-y-m-d divider-dash range-low-today no-transparency" readonly value="{$payment_obj->m_paid_date}" maxlength="10" size="30" type="text" />
         </li>
 	<li>
           <label for="extra_amount">Extra Amount</label>

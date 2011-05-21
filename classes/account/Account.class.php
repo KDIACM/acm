@@ -10,6 +10,7 @@ class CAccount {
   public $m_amount = '';
   public $m_rate = '';
   public $m_open_date = '';
+  public $m_garentee = '';
   public $m_close_date = '';
   public $m_update_date = '';
   public $m_status = '';
@@ -23,10 +24,11 @@ class CAccount {
   public function Create($p_arr_data) {
     $db = CDBConnection::GetInstance();
 
-    $sql = " INSERT INTO account (customer_id,account_number,amount,rate,open_date)" .
+    $sql = " INSERT INTO account (customer_id,account_number,amount,garentee,rate,open_date)" .
             " VALUES (" . CUtility::StringEscape($p_arr_data['customer_id']) . ",
                       " . CUtility::StringEscape($p_arr_data['account_number']) . ",
                       " . CUtility::StringEscape($p_arr_data['amount']) . ",
+                      " . CUtility::StringEscape($p_arr_data['garentee']) . ",
                       " . CUtility::StringEscape($p_arr_data['rate']) . ",
                       " . CUtility::StringEscape($p_arr_data['open_date']) . ")";
 
@@ -35,15 +37,16 @@ class CAccount {
     return $db->Insert_ID();
   }
 
-  public function Update($p_account_id, $p_arr_data) {
+  public function Update() {
     $this->db = CDBConnection::GetInstance();
 
-    $sql = " UPDATE account SET customer_id = " . CUtility::StringEscape($p_arr_data['customer_id']) . ",
-												 account_number = " . CUtility::StringEscape($p_arr_data['account_number']) . ",
-													amount = " . CUtility::StringEscape($p_arr_data['amount']) . ",
-													rate = " . CUtility::StringEscape($p_arr_data['rate']) . ",
-													update_date = " . CUtility::StringEscape($p_arr_data['update_date']) .
-            "WHERE account_id = " . CUtility::StringEscape($p_account_id) . " ";
+    $sql = " UPDATE account SET customer_id = " . CUtility::StringEscape($this->m_customer_id) . ",
+				account_number = " . CUtility::StringEscape($this->m_account_number) . ",
+				amount = " . CUtility::StringEscape($this->m_amount) . ",
+				rate = " . CUtility::StringEscape($this->m_rate) . ",
+                                garentee = " . CUtility::StringEscape($this->m_garentee) . ",
+				update_date = " . CUtility::StringEscape($this->m_update_date) .
+            " WHERE account_id = " . CUtility::StringEscape($this->m_account_id) . " ";
 
     $rs = $this->db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
   }
@@ -54,9 +57,9 @@ class CAccount {
     if ($status != 'all') {
       $where = " WHERE status = $status ";
     }
-    if (!empty ($user_id)) {
-      $where .= empty ($where)?" WHERE ":" AND ";
-      $where .= " customer_id = ". CUtility::StringEscape($user_id);
+    if (!empty($user_id)) {
+      $where .= empty($where) ? " WHERE " : " AND ";
+      $where .= " customer_id = " . CUtility::StringEscape($user_id);
     }
     $db = CDBConnection::GetInstance();
     $sql = " SELECT * " .
@@ -64,7 +67,7 @@ class CAccount {
             $where .
             " ORDER BY sys_date";
 
-				$rs = $db->Execute($sql) or CUtility::SQLError(__FILE, __LINE);
+    $rs = $db->Execute($sql) or CUtility::SQLError(__FILE, __LINE);
 
     while ($data = $rs->FetchRow()) {
 
@@ -96,6 +99,7 @@ class CAccount {
 
     $rs = $db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
     if (!$rs
+
       )throw new Exception();
 
     $data = $rs->FetchRow();
@@ -106,6 +110,7 @@ class CAccount {
     $account_obj->m_amount = $data['amount'];
     $account_obj->m_rate = $data['rate'];
     $account_obj->m_open_date = $data['open_date'];
+    $account_obj->m_garentee = $data['garentee'];
     $account_obj->m_close_date = $data['close_date'];
     $account_obj->m_update_date = $data['update_date'];
     $account_obj->m_sys_date = $data['sys_date'];
@@ -118,16 +123,14 @@ class CAccount {
     return new CCustomer($this->m_customer_id);
   }
 
-		public function updateStatus($customer_id,$accounr_id,$status)
-		{
+  public function updateStatus() {
 
-						$this->db = CDBConnection::GetInstance();
-						$sql = " UPDATE account SET status = " . CUtility::StringEscape($status) . 
-            " WHERE customer_id = " . CUtility::StringEscape($customer_id) . " AND account_id =".CUtility::StringEscape($accounr_id);
-			
+    $this->db = CDBConnection::GetInstance();
+    $sql = " UPDATE account SET status = " . CUtility::StringEscape($this->m_status) .
+            " WHERE customer_id = " . CUtility::StringEscape($this->m_customer_id) . " AND account_id =" . CUtility::StringEscape($this->m_account_id);
+
     $rs = $this->db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
-
-		}
+  }
 
 }
 

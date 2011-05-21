@@ -26,25 +26,25 @@
         </li>
         <li>
           <label for="rate">Rate</label>
-          <input name="rate" id="rate" type="text" size="30" value="{$account_obj->m_rate}" />
+          <input name="rate" id="rate" type="text" size="30" maxlength="2" value="{$account_obj->m_rate}" /> %
         </li>
 								<li>
           <label for="open_date">Account Open date</label>
           {if $mode=="edit"}
             {$account_obj->m_open_date}
           {else}
-            <input name="open_date" id="open_date" type="text" size="30" value="{$account_obj->m_open_date}" />
+          <input name="open_date" id="open_date" class="w8em format-y-m-d divider-dash range-low-today no-transparency" readonly value="{$account_obj->m_open_date}" maxlength="10" size="15" type="text" />
           {/if}
         </li>
-								{if $mode=="edit"}
+	{if $mode=="edit"}
         <li>
           <label for="update_date">Account Update date</label>
-          <input name="update_date" id="update_date" type="text" size="30" value="{$account_obj->m_update_date}" />
+          <input name="update_date" id="update_date" class="w8em format-y-m-d divider-dash range-low-today no-transparency" readonly value="{$account_obj->m_update_date}" maxlength="10" size="15" type="text" />
         </li>
-							{/if}
-							<li>
+	{/if}
+	<li>
           <label for="garente">Garentee</label>
-          <textarea cols="30" rows="5"></textarea>
+          <textarea cols="30" name="garentee" rows="5">{$account_obj->m_garentee}</textarea>
         </li>
       </ol>
       <div class="buttons">

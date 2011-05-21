@@ -41,20 +41,31 @@
     </thead>
     <tbody>
 
-      {section name=payment_list loop=$payment_list}
-      <tr id="{$payment_list[payment_list]->m_payment_id}">
-        <td>{$payment_list[payment_list]->m_payment_amount}</td>
-        <td>{$payment_list[payment_list]->m_payment_date}</td>
-        <td class="lft">{$payment_list[payment_list]->m_extra_amount}</td>
-								<td class="lft">{$payment_list[payment_list]->m_paid_date}</td>
-								<td>{$payment_list[payment_list]->m_paid_amount}</td>
-								<td>{$payment_list[payment_list]->m_last_month_amount}</td>
-								<td>{$payment_list[payment_list]->m_rest_amount}</td>
-								<td>{$payment_list[payment_list]->m_extra_interest}</td>
-								<td><a href="make_payment.php?mode=add_ex_pay&amp;t_id={$payment_list[payment_list]->m_payment_id}&amp;ac_id={$account_obj->m_account_id}" title="Edit">Add EP</a></td>
-								<td><a href="make_payment.php?mode=editdd&amp;t_id={$payment_list[payment_list]->m_payment_id}&amp;ac_id={$account_obj->m_account_id}" title="Edit">Edit</a></td>
+      {foreach from=$data_arr item=data_item}
+      {if $data_item['action'] == 1}
+        {assign var=class value="{cycle values='odd_row,even_row'}"}
+      {/if}  
+      <tr  class="{$class}">
+        <td>{$data_item['payment_amount']}</td>
+        <td>{$data_item['payment_date']}</td>
+        <td class="lft">{$data_item['extra_amount']}</td>
+	<td class="lft">{$data_item['paid_date']}</td>
+	<td>{$data_item['paid_amount']}</td>
+	<td>{$data_item['last_month_amount']}</td>
+	<td>{$data_item['rest_amount']}</td>
+	<td>{$data_item['extra_interest']}</td>
+        <td>
+            {if $data_item['action'] == 1}
+            <a href="make_payment.php?mode=add_ex_pay&amp;t_id={$data_item[payment_id]}&amp;ac_id={$data_item[account_id]}" title="Edit">Add EP</a>
+            {/if} 
+        </td>
+	<td>
+            {if $data_item['action'] == 1}
+            <a href="make_payment.php?mode=editdd&amp;t_id={$data_item[payment_id]}&amp;ac_id={$data_item[account_id]}" title="Edit">Edit</a>
+            {/if}
+        </td>
       </tr>
-      {/section}
+      {/foreach}
 
     </tbody>
   </table>

@@ -38,14 +38,16 @@
 
 <!-- acm js files -->
 <script src="js/jquery.validate.js" type="text/javascript"></script>
-{if $upage == 1}
+{if $user_page}
 <script src="js/acm_user.js" type="text/javascript"></script>
-{elseif $upage == 2}
+{elseif $customer_page}
 <script src="js/acm_customer.js" type="text/javascript"></script>
-{elseif $upage == 3}
+{elseif $account_page}
 <script src="js/acm_account.js" type="text/javascript"></script>
-{elseif $upage == 4}
+{elseif $payment_page}
 <script src="js/acm_payment.js" type="text/javascript"></script>
+{elseif $acc_trns_page}
+<script src="js/acm_acc_transaction.js" type="text/javascript"></script>
 {/if}
 
 </head>

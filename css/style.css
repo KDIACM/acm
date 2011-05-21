@@ -344,6 +344,7 @@ background-color:#5e0000;
 	padding-left:2em;
 	background:#ffe5e5 url(../images/error.gif) no-repeat .5em .7em;
 	border:1px solid #ff0000;
+        width: 300px !important;
 }
 .msg .warn {
 	padding:.6em;
@@ -495,4 +496,19 @@ a.delete span {
   font-style: italic;
   color: #414140;
   font-size: 11px;
+}
+.odd_row td{
+  background-color: #fef2f2 !important;
+}
+
+.even_row td{
+  background-color: #c9c1c1 !important;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.underline {
+  text-decoration: underline;
 }

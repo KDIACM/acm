@@ -16,7 +16,7 @@
     </caption>
     <thead>
       <tr>
-								<th title="Sort by Name" class="tooltip">Customer No</th>
+        <th title="Sort by Name" class="tooltip">Customer No</th>
         <th title="Sort by Name" class="tooltip">Name</th>
         <th title="Sort by Real Name" >Nick Name</th>
         <th title="Sort by Email Address">Accounts</th>
@@ -27,8 +27,8 @@
     <tbody>
 
       {section name=customer_list loop=$customer_list}
-      <tr id="{$customer_list[customer_list]->m_customer_id}">
-										<td>{$customer_list[customer_list]->m_customer_code}</td>
+      <tr id="{$customer_list[customer_list]->m_customer_id}" class="{cycle values='odd_row,even_row'}">
+        <td>{$customer_list[customer_list]->m_customer_code}</td>
         <td><a href="customer.php?mode=view&amp;t_id={$customer_list[customer_list]->m_customer_id}" title="Click to View">{$customer_list[customer_list]->m_first_name} {$customer_list[customer_list]->m_last_name}</a></td>
         <td>{$customer_list[customer_list]->m_nick_name}</td>
         <td class="lft"><a href="account.php?mode=cust_acc_list&t_id={$customer_list[customer_list]->m_customer_id}" title="View">View</a> &nbsp;&nbsp;<a href="account.php?u_id={$customer_list[customer_list]->m_customer_id}" title="add account">Add</a></td>
@@ -42,7 +42,7 @@
       {/section}
 
       <tr>
-        <td>&nbsp;</tr>
+        <td>&nbsp;</td>
       </tr>
       <tr>
         <td>

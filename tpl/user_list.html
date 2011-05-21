@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       {section name=user_list loop=$user_list}
-      <tr id="{$user_list[user_list]->m_user_id}">
+      <tr id="{$user_list[user_list]->m_user_id}" class="{cycle values='odd_row,even_row'}">
         <td>{$user_list[user_list]->m_user_name}</td>
         <td><a href="#" title="View Account">View</a></td>
         <td><a href="user.php?mode=edit&amp;t_id={$user_list[user_list]->m_user_id}" title="Edit">Edit</a></td>

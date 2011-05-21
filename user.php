@@ -20,7 +20,7 @@ $navigaton_type	=	new CNavigation('Users','user.php?mode=list');
 $navigation_obj->AddNavigation( $navigaton_type );
 
 $smarty->assign('mode', $mode);
-$smarty->assign('upage', 1);
+$smarty->assign('user_page', 1);
 
 switch ($mode) {
   case '':

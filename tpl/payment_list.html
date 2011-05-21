@@ -11,19 +11,19 @@
         <th title="Sort by Name" class="tooltip">Customer Name</th>
         <th title="Sort by Real Name" >Acc No</th>
         <th title="Sort by Email Address">Payment Amount</th>
-								<th>Payment Date</th>
-							<th>&nbsp;</th>
+        <th>Payment Date</th>
+        <th>&nbsp;</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
     <tbody>
 
       {section name=payment_list loop=$payment_list}
-      <tr id="{$payment_list[payment_list]->m_payment_id}">
+      <tr id="{$payment_list[payment_list]->m_payment_id}" class="{cycle values='odd_row,even_row'}">
         <td><a href="customer.php?mode=view&amp;t_id={$payment_list[payment_list]->m_customer_obj->m_customer_id}" title="Click to View">{$payment_list[payment_list]->m_customer_obj->m_first_name} {$payment_list[payment_list]->m_customer_obj->m_last_name}</a></td>
         <td>{$payment_list[payment_list]->m_payment_id}</td>
         <td class="lft">{$payment_list[payment_list]->m_payment_amount}</td>
-								<td class="lft">{$payment_list[payment_list]->m_payment_date}</td>
+        <td class="lft">{$payment_list[payment_list]->m_payment_date}</td>
         <td><a href="make_payment.php?mode=edit&amp;t_id={$payment_list[payment_list]->m_payment_id}" title="Edit">Edit Payment</a></td>
         <td><a href="make_payment.php?mode=delete&amp;t_id={$payment_list[payment_list]->m_payment_id}" class="handle1 delete" title="Delete" id="delete1"><span>Delete</span></a></td>
       </tr>

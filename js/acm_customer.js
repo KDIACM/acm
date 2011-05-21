@@ -4,7 +4,8 @@ $().ready(function() {
     errorElement: "em",
     rules: {
       txt_customer_id: {
-        required : true
+        required : true,
+        number: true,
       },
       txt_f_name: {
         required : true
@@ -22,7 +23,8 @@ $().ready(function() {
     },
     messages: {
       txt_customer_id: {
-        required : "Enter Customer ID"
+        required : "Enter Customer ID",
+        number: "Customer ID should be a number"
       },
       txt_f_name: {
         required : "Enter First name"
