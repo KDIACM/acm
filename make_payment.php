@@ -39,7 +39,7 @@ switch ($mode) {
     case 'add_pay':
 
     $account_id = (!empty ($t_id)) ? $t_id : 0;
-    $accouncaset_obj = CAccount::getObject($account_id);
+    $account_obj = CAccount::getObject($account_id);
     $customer_obj = $account_obj->getCustomer();
 
     $navigaton_type	=	new CNavigation('Make Payment');
@@ -50,8 +50,8 @@ switch ($mode) {
     $smarty->assign('customer_obj', $customer_obj);
 
     $payment_obj = new CPayment();
-    $payment_obj->setLastMonthAmountAndNextPaymentDate($customer_obj->m_customer_id, $account_obj->m_account_id);
-    $payment_obj->setPaymentAmount($customer_obj->m_customer_id, $account_obj->m_account_id);
+    $payment_obj->setLastMonthAmountAndNextPaymentDate($customer_obj->m_customer_id,$account_obj->m_account_id);
+    $payment_obj->setPaymentAmount($account_obj->m_account_id);
 
     $smarty->assign('payment_obj', $payment_obj);
     $smarty->display('make_payment.html');
@@ -112,6 +112,7 @@ case 'view_cust_pay';
     $payment_list_temp = array();
     $payment_list_temp = CPayment::getPaymentByAccountAndCustomer($customer_id,$account_id);
     $account_obj = CAccount::getObject($account_id);
+
     //$payment_amount = $account_obj->m_amount;
     //echo '<pre>'; print_r($payment_list_temp);
     $data_arr = array();

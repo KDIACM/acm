@@ -206,7 +206,7 @@ class CPayment {
                 " FROM account " .
                 " WHERE account_id =" . CUtility::StringEscape($p_account_id);
 
-        $rs = $db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
+	$rs = $db->Execute($sql) or CUtility::SQLError(__FILE__, __LINE__);
         if (!$rs)
             throw new Exception();
         $data = $rs->FetchRow();

@@ -16,6 +16,7 @@ class CAccount {
   public $m_status = '';
   public $m_sys_date = '';
   public $m_customer_obj = null;
+ 
 
   public function __construct() {
     
