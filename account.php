@@ -74,7 +74,7 @@ switch ($mode) {
       $p_arr_data['owner']      = CAccountTransaction::TRNS_BY_ME;
       CAccountTransaction::Create($p_arr_data);
 
-      CUtility::Redirect('account.php?mode=cust_acc_list&t_id='.$account_id);
+      CUtility::Redirect('account.php?mode=cust_acc_list&t_id='.$_POST['u_id']);
     }
     break;
 
