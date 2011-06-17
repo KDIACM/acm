@@ -67,6 +67,8 @@
 	<td>
             {if $data_item['action'] == 1}
             <a href="make_payment.php?mode=editdd&amp;t_id={$data_item['payment_id']}&amp;ac_id={$data_item['account_id']}" title="Edit">Edit</a>
+            {else if $data_item['sub_action'] == 1}
+            <a href="make_payment.php?mode=edit_ex_pay&amp;t_id={$data_item['payment_option_id']}&amp;ac_id={$data_item['account_id']}" title="Edit">Edit</a>
             {/if}
         </td>
       </tr>
