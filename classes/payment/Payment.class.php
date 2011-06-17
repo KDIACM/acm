@@ -18,8 +18,11 @@ class CPayment {
     // public $m_extra_interest = '';
     public $m_account_obj = null;
     public $m_customer_obj = null;
-    
-  
+    public $m_payment_option_id = null;
+
+
+
+
 
     public function __construct() {
         
@@ -122,7 +125,7 @@ class CPayment {
         $db = CDBConnection::GetInstance();
 
         $sql = " SELECT P.payment_id, P.account_id, P.payment_amount, PO.extra_amount, P.status, P.sys_date, P.payment_date, AC.customer_id, " .
-                " PO.paid_date, PO.paid_amount, P.last_month_amount, P.rest_amount, PO.extra_interest " .
+                " PO.paid_date, PO.paid_amount, P.last_month_amount, P.rest_amount, PO.extra_interest,PO.payment_option_id " .
                 " FROM payment P, account AC, customer C ,payment_option PO" .
                 " WHERE P.account_id = AC.account_id AND AC.customer_id = C.customer_id AND P.payment_id = PO.payment_id  AND C.customer_id = " . CUtility::StringEscape($customer_id) . " AND AC.account_id = " . CUtility::StringEscape($account_id) .
                 " ORDER BY PO.paid_date ASC";
@@ -144,6 +147,8 @@ class CPayment {
             $payment_obj->m_rest_amount = $data['rest_amount'];
             $payment_obj->m_extra_interest = $data['extra_interest'];
             $payment_obj->m_sys_date = $data['sys_date'];
+            $payment_obj->m_payment_option_id = $data['payment_option_id'];
+            
             if ($relation == true) {
                 $payment_obj->m_account_obj = CAccount::getObject($data['account_id']);
                 //$payment_obj->m_customer_obj = new CCustomer($data['customer_id']);

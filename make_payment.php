@@ -117,6 +117,7 @@ case 'view_cust_pay';
     //echo '<pre>'; print_r($payment_list_temp);
     $data_arr = array();
     $inc = 0;
+    $last_inc = 0;
     
     $last_index = "";  
     $rest_amount = 0;
@@ -127,6 +128,10 @@ case 'view_cust_pay';
       list($y, $m , $d) = explode('-' , $payment->m_paid_date);    
       $index = $y.'-'.$m;
       if ($last_index != $index) {
+        // make editable last sub payment
+        if ($inc != 0) {
+          $data_arr[$last_inc]['sub_action']         = 1;
+        }
         $data_arr[$inc]['payment_amount'] = $payment_amount;
         $data_arr[$inc]['payment_date']   = $payment->m_payment_date;
         $data_arr[$inc]['action']         = 1;
@@ -138,6 +143,8 @@ case 'view_cust_pay';
         $data_arr[$inc]['payment_amount'] = '';
         $data_arr[$inc]['payment_date']   = '';
         $data_arr[$inc]['action']         = 0;
+        $data_arr[$inc]['sub_action']     = 0;
+        $last_inc = $inc;
       }
       
       $rest_amount = $rest_amount+$payment->m_extra_amount+$payment->m_extra_interest-$payment->m_paid_amount;
@@ -148,12 +155,15 @@ case 'view_cust_pay';
       $data_arr[$inc]['paid_amount']    = $payment->m_paid_amount;
       $data_arr[$inc]['rest_amount']    = $rest_amount;
       $data_arr[$inc]['extra_interest']   = $payment->m_extra_interest;
+      $data_arr[$inc]['payment_option_id'] = $payment->m_payment_option_id;
       $inc++;
     }
+
+    // make editable last sub payment
+    if ($data_arr[$last_inc]['action'] != 1) {
+      $data_arr[$last_inc]['sub_action']   = 1;
+    }
     
-    //echo '<pre>';
-    //print_r($data_arr);
-    //die();
     $smarty->assign('data_arr', $data_arr);
     $smarty->assign('navigation', $navigation_obj);
     $smarty->assign('payment_list',$payment_list_temp );
@@ -171,6 +181,7 @@ case 'add_ex_pay':
     $customer_obj = $account_obj->getCustomer();
     $navigaton_type	=	new CNavigation('Add Sub Payment');
     $navigation_obj->AddNavigation( $navigaton_type );
+    
     $smarty->assign('navigation',$navigation_obj);
     $smarty->assign('account_obj_arr', CAccount::GetAll(false,ACTIVE));
     $smarty->assign('payment_obj', CPayment::getObject($payment_id));
@@ -196,6 +207,44 @@ case 'add_sub':
     $arr_data['extra_interest']   = $_POST['extra_interest'];
 
     CSubPayment::Create($arr_data);
+    CUtility::Redirect("make_payment.php?mode=view_cust_pay&t_id=$account_id&c_id=$customer_id");
+    break;
+
+case 'edit_ex_pay':
+
+    $payment_id = (!empty ($t_id)) ? $t_id : 0 ;
+    $account_id = $_GET['ac_id'] ;
+    $account_obj = CAccount::getObject($account_id);
+    $customer_obj = $account_obj->getCustomer();
+    $navigaton_type	=	new CNavigation('Edit Sub Payment');
+    $navigation_obj->AddNavigation( $navigaton_type );
+    $smarty->assign('navigation',$navigation_obj);
+    $smarty->assign('mode','edit_sub');
+    //$smarty->assign('account_obj_arr', CAccount::GetAll(false,ACTIVE));
+    $smarty->assign('payment_obj', CSubPayment::getObject($payment_id));
+    $smarty->assign('account_obj' , $account_obj);
+    $smarty->assign('customer_obj', $customer_obj);
+    $smarty->display('make_sub_payment.html');
+
+    break;
+
+  case 'edit_sub':
+
+    $arr_data = array();
+    $account_id = $_POST['account_id'];
+    $customer_id = $_POST['c_id'];
+    $payment_id = $_POST['payment_id'];
+
+    $rest_amount = $_POST['rest_amount'];
+    $rest_amount   = (($rest_amount+$_POST['extra_amount']+$_POST['extra_interest']) - ($_POST['paid_amount']) );
+
+    $sub_payment_obj = new CSubPayment($payment_id);
+    
+    $sub_payment_obj->m_extra_amount = $_POST['extra_amount'];
+    $sub_payment_obj->m_extra_interest = $_POST['extra_interest'];
+    $sub_payment_obj->m_paid_amount = $_POST['paid_amount'];
+    $sub_payment_obj->Update($rest_amount);
+
     CUtility::Redirect("make_payment.php?mode=view_cust_pay&t_id=$account_id&c_id=$customer_id");
     break;
 
